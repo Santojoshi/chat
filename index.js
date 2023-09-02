@@ -22,6 +22,7 @@ io.on('connection', (socket) => {
     console.log('user', name);
     users[socket.id] = name;
     socket.broadcast.emit('user-joined', name);
+    io.emit('user_list', users);
   });
 
   socket.on('send', (message) => {
@@ -32,7 +33,9 @@ io.on('connection', (socket) => {
   socket.on('disconnect', message=>{
     socket.broadcast.emit('left', users[socket.id])
     delete users[socket.id];
+    io.emit('user_list', users);
   });
+
 })
 
 const PORT = process.env.PORT || 1000
