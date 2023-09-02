@@ -27,7 +27,13 @@ io.on('connection', (socket) => {
   socket.on('send', (message) => {
     socket.broadcast.emit('receive', { message: message, name: users[socket.id] });
   });
-});
+
+  
+  socket.on('disconnect', message=>{
+    socket.broadcast.emit('left', users[socket.id])
+    delete users[socket.id];
+  });
+})
 
 const PORT = process.env.PORT || 1000
 server.listen(PORT, () => {
